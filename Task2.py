@@ -5,6 +5,32 @@ import os, time
 # Help! I'm trying to make this cool bot but my code is too messy :( Please help me organise it into reusable components.
 
 # Define your reusable functions here:
+def guess_gender(name):
+    gender_resp = requests.get(f"https://api.genderize.io/?name={name}").json()
+    gender = gender_resp["gender"]
+    return gender
+
+def probability(gender_resp):
+    prob_percent = gender_resp["probability"] * 100
+    return [prob_percent]
+
+def gender_correct():
+        gender_correct = input("Am I right? :) (Y/n)")
+        if gender_correct.lower() in ["", "yes", "y", "ye"]:
+         print("Wooooooh! Computer 1, Human 0.")
+        else:
+            print("Ahhhh, sorry! :(")
+
+def postcode_finder(latitude):
+        postcode_raw = input("\nSo, what's your postcode? ")
+        postcode_resp = requests.get(f"https://api.postcodes.io/postcodes/{postcode_raw}").json()
+
+        area = postcode_resp['result']['admin_ward']
+        longitude = postcode_resp['result']['longitude']
+        latitude = postcode_resp['result']['latitude']
+        print(f"Nice! so you live in {area}.\n")
+
+        print("Let me just check the weather there today...\n")
 # Make sure each function only does ONE thing!!!!!!!!!!!
 
 def guess_gender(name):
@@ -13,6 +39,17 @@ def guess_gender(name):
     prob_percent = gender_resp["probability"] * 100
     return [gender, prob_percent]
 
+def cat():
+        input("\nWould you like a cat fact while you wait? ")
+        print("Doesn't matter what you think, I'm going to give you one anyway :)")
+        time.sleep(3)
+        joke_resp = requests.get("https://catfact.ninja/fact").json()
+        joke = joke_resp['fact']
+        print("\n###########################")
+        print("CAT FACT:")
+        print(f"\n{joke}\n")
+        print("So interesting isn't it!")
+        print("###########################")
 ###########################################
 
 def weird_weather_bot():
@@ -85,9 +122,13 @@ weird_weather_bot()
 # After you have written the reusable functions, answer the following:
 # Questions:
 # 1. What are the preconditions for your code not to break?
-# 2. Validate the user's input based on your preconditions.
+"""When asked, inputs must be either string or an integer, if not the program will crash. 
+When asked if they got the gender correct answer must be either yes (ye) or no."""
+# 2. Validate the user's input based on your preconditions. (OK)
 # 3. Why was it useful to use reusable components in this case? Please mention at least 2 reasons and don't forget to contextualise.
-
+"""Splits up the code so that it isn't just one giant heap with no breaks. This allows us 
+better understand each part and makes it easier to adjust and edit individual sections
+without messing up or changing the entire code"""
 # Further Tasks:
 # 1. Put your functions in seperate appropriate files and import them in.
 # 2. Make sure all of your functions (except the main one) only do ONE thing or process.
